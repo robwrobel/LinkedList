@@ -120,4 +120,81 @@ public class LinkedList<T> {
         node.element = element;
         size++;
     }
+
+
+    public T remove() {
+        return removeFirst();
+    }
+
+    public T removeFirst() {
+        if (head == null) throw new NoSuchElementException();
+
+        T element = head.element;
+
+        if (head.next == null) {
+            head = null;
+            tail = null;
+        } else {
+            head.next.prev = null;
+            head = head.next;
+        }
+        size--;
+        return element;
+    }
+
+    public T removeLast() {
+        if (tail == null) throw new NoSuchElementException();
+
+        T element = tail.element;
+
+        if (tail.prev == null) {
+            head = null;
+            tail = null;
+        } else {
+            tail.prev.next = null;
+            tail = tail.prev;
+        }
+        size--;
+        return element;
+    }
+
+    public boolean remove(T element) {
+        if (head == null) return false;
+        Node node = head;
+        for (int i = 0; i< size(); i++) {
+            if (node.element.equals(element)) {
+                remove(i);
+                return true;
+            }
+            node = node.next;
+        }
+        return false;
+    }
+
+    public T remove(int index) {
+        if (index<0 || index >= size) throw new IndexOutOfBoundsException();
+
+        if (index == 0) {
+            return removeFirst();
+        } else if (index == size - 1) {
+            return removeLast();
+        } else {
+            return removeMiddle(index);
+        }
+    }
+
+    private T removeMiddle(int index) {
+        Node node = head;
+        for (int i = 0; i<index; i++) {
+            node = node.next;
+        }
+        T element = node.element;
+
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+        node.next = null;
+        node.prev = null;
+        size--;
+        return element;
+    }
 }
